@@ -1,0 +1,1 @@
+from .guncelkesintiler_scraper import GuncelkesintilerScraper, GuncelkesintilerResult
