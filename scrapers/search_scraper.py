@@ -40,11 +40,12 @@ class SearchScraper:
         options.add_argument("--disable-infobars")
         options.add_argument("--disable-extensions")
         client_config = ClientConfig(
-            remote_server_addr=settings.SELENIUM_REMOTE_SERVER_ADDR,
+            remote_server_addr='http://selenium_hub:4444/wd/hub',
         )
         browser = webdriver.Remote(
             options=options,
-            client_config=client_config,
+            command_executor="http://selenium-hub:4444",
+            # client_config=client_config,
         )
 
         browser.execute_cdp_cmd(

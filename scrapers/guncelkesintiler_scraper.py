@@ -41,13 +41,14 @@ class GuncelkesintilerScraper:
         self.options.add_argument("--disable-extensions")
 
         self.client_config = ClientConfig(
-            remote_server_addr=settings.SELENIUM_REMOTE_SERVER_ADDR,
+            remote_server_addr='http://selenium_hub:4444/wd/hub',
         )
 
         # self.browser = webdriver.Chrome(options=self.options)
         self.browser = webdriver.Remote(
-            client_config=self.client_config,
+            # client_config=self.client_config,
             options=self.options,
+            command_executor="http://selenium-hub:4444",
             # desired_capabilities=DesiredCapabilities.CHROME
         )
         self.browser.execute_cdp_cmd(

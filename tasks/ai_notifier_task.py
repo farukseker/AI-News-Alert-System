@@ -34,32 +34,32 @@ class AiNotifierTask(BaseTask):
             }
             for new in news
         ]
+        if extracted_data:
+            html = generate_email_html(extracted_data)
+            soup = BeautifulSoup(html, "html.parser")
 
-        html = generate_email_html(extracted_data)
-        soup = BeautifulSoup(html, "html.parser")
+            title = soup.find("title").get_text(strip=True)
 
-        title = soup.find("title").get_text(strip=True)
+            html_smtp_mailer: HtmlSmtpMailer = HtmlSmtpMailer(
+                username=settings.SMTP_USERNAME,
+                password=settings.SMTP_PASSWORD,
+                host=settings.SMTP_DOMAIN,
+                port=settings.SMTP_PORT,
+            )
 
-        html_smtp_mailer: HtmlSmtpMailer = HtmlSmtpMailer(
-            username=settings.SMTP_USERNAME,
-            password=settings.SMTP_PASSWORD,
-            host=settings.SMTP_DOMAIN,
-            port=settings.SMTP_PORT,
-        )
+            html_smtp_mailer.send_html(
+                subject=title,
+                html_body=html,
+                from_email=settings.SMTP_USERNAME,
+                to_emails=settings.TO_EMAIL,
+            )
 
-        html_smtp_mailer.send_html(
-            subject=title,
-            html_body=html,
-            from_email=settings.SMTP_USERNAME,
-            to_emails=settings.TO_EMAIL,
-        )
-
-        # Mark all processed news as evaluated
-        for new in news:
-            new.is_evaluated = True
-        else:
-            logger.info('news list empty')
-        self.db_session.commit()
+            # Mark all processed news as evaluated
+            for new in news:
+                new.is_evaluated = True
+            else:
+                logger.info('news list empty')
+            self.db_session.commit()
 
 
 __all__ = "AiNotifierTask",

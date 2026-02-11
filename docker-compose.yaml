@@ -7,39 +7,56 @@ services:
       POSTGRES_PASSWORD: password_kesinti
       POSTGRES_DB: kesinti
     ports:
-      - "5432"
+      - "7000:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - kesinti-net
 
-  selenium-hub:
+  selenium_hub:
     image: selenium/hub:latest
     container_name: selenium-hub
-    ports:
-      - "4444"
     environment:
-#      - SE_OPTS=--username ${SELENIUM_USERNAME} --password ${SELENIUM_PASSWORD}
       - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_SESSION_REQUEST_TIMEOUT=900
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_VNC_PASSWORD=yeni_sifren
+    ports:
+      - "4444:4444"
+    networks:
+      - kesinti-net
 
   chrome-node:
     image: selenium/node-chrome:latest
     container_name: chrome-node
     depends_on:
-      - selenium-hub
+      - selenium_hub
     environment:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_SESSION_TIMEOUT=900
     shm_size: 2g
+    networks:
+      - kesinti-net
 
   app:
     build:
       context: .
     env_file:
       - .env.docker
+    depends_on:
+      - db
+      - selenium_hub
+      - chrome-node
+    networks:
+      - kesinti-net
 
 volumes:
   postgres_data:
     driver: local
+
+networks:
+  kesinti-net:
+    driver: bridge
