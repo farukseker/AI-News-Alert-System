@@ -46,3 +46,4 @@ def generate_email_html(extracted_data: dict | list) -> str:
     )
     return html.strip()
 
+__all__ = "generate_email_html",

@@ -63,7 +63,7 @@ def main():
     logger.info(f'env dump test end result{selenium_health_check_status} {"="*25}')
 
     logger.info('init_db - start')
-    from db_init import init_db
+    from utils.db_init import init_db
     init_db()
     logger.info('init_db - end')
 

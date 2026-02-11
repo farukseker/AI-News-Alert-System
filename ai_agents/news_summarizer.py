@@ -86,3 +86,5 @@ def analyze_news(text: str, now: str, urls: list[str] | str) -> Output:
 
     print("[INFO] Analysis complete")
     return validated_output
+
+__all__ = "analyze_news",

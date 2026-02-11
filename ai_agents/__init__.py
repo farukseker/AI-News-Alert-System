@@ -1,1 +1,2 @@
 from .news_summarizer import analyze_news
+from .ai_email_copywriter import generate_email_html

@@ -41,5 +41,4 @@ def kill_chrome_processes():
     print("[DONE] All Chrome processes terminated.")
 
 
-if __name__ == "__main__":
-    kill_chrome_processes()
+__all__ = "kill_chrome_processes",

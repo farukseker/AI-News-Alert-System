@@ -1,9 +1,9 @@
-from ai_agents.ai_email_copywriter import generate_email_html
+from ai_agents import generate_email_html
 from bs4 import BeautifulSoup
 
 from models import News
 from logging_config import get_logger
-from mailsender import HtmlSmtpMailer
+from utils.mailsender import HtmlSmtpMailer
 from config import get_settings
 from . import BaseTask
 

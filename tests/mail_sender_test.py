@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 import logging
 
-from mailsender import HtmlSmtpMailer  # assume class is in mailer.py
+from utils.mailsender import HtmlSmtpMailer  # assume class is in mailer.py
 
 
 class TestHtmlSmtpMailer(unittest.TestCase):

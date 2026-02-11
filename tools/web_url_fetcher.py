@@ -4,8 +4,6 @@ from langchain.tools import tool
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.webdriver.remote.client_config import ClientConfig
 
 from bs4 import BeautifulSoup
 
@@ -38,20 +36,13 @@ class WebUrlFetcherInput(BaseModel):
     args_schema=WebUrlFetcherInput,
 )
 def web_url_fetcher(url: str) -> str:
-    from cache import web_url_fetcher_allowed_url_list, web_url_fetcher_max_request_count, web_url_fetcher_request_count
 
     print('web_url_fetcher: entry')
 
-    global web_url_fetcher_request_count
 
     print('web_url_fetcher: ', url)
     browser = None
-    if not url in web_url_fetcher_allowed_url_list:
-        return "ERROR - this url not in allowed_url_list pls use provided urls by system prompt or userinput"
     try:
-        web_url_fetcher_request_count += 1
-        if not web_url_fetcher_max_request_count < web_url_fetcher_request_count:
-            return "ERROR - u used all allowed request count, you can't use this tool any more"
         options = Options()
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')

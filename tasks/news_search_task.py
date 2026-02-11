@@ -9,6 +9,7 @@ from scrapers import SearchScraper, SearchResult
 from ai_agents import analyze_news
 from . import BaseTask
 
+
 logger = get_logger(__name__)
 
 
