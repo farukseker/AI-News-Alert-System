@@ -3,3 +3,4 @@ target = 'https://guncelkesintiler.com/bursa/orhangazi/'
 
 # https://www.uedas.com.tr/tr/kesintiler
 # ['184631', '20072', '184633', '20073', '184635', '184621', '184637', '184639', '20077', '184641', '184643', '184645', '184647', '184649', '184651', '184653', '20074', '184655', '184657', '184659', '20075', '184623', '184661', '184663', '184665', '184625', '20076', '184667', '184669', '184627', '184629']
+# ['AKHAREM', 'ARAPZADE', 'BAYIRKÖY', 'CAMİİKEBİR', 'CİHANKÖY', 'ÇAKIRLI', 'ÇELTİKÇİ', 'DUTLUCA', 'FATİH', 'FINDIKLI', 'GEDELEK', 'GEMİÇ', 'GÖLYAKA', 'GÜRLE', 'HAMZALI', 'HECELER', 'HÜRRİYET', 'KARSAK', 'KERAMET', 'MAHMUDİYE', 'MURADİYE', 'NARLICA', 'ORTAKÖY', 'ÖRNEKKÖY', 'PAŞAPINAR', 'SÖLÖZ', 'TEKKE', 'ÜREĞİL', 'YENİGÜRLE', 'YENİKÖY', 'YENİSÖLÖZ']

@@ -1,36 +1,22 @@
-# from requests import api
-# from ddgs import DDGS
-# from hashlib import sha256
-# from browser import sync_scraper
-#
-#
-# print(sha256('Bursa Orhangazi ilçesi yapılacak kesintiler'.encode('utf-8')).hexdigest())
-#
-# r = sync_scraper('https://farukseker.com.tr')
-# #
-# print(r)
-#
-# results = DDGS().text("Bursa Orhangazi ilçesi yapılacak kesintiler", region='tr-tr', max_results=15)
-# # print(results)
-# print('#', '*' * 15)
-# for result in results:
-#     target = result.get('href')
-#     if r := sync_scraper(target):
-#         print('context on', target)
-#     else:
-#         print('context off', target)
-#     print('*'*15)
+from database import SessionLocal, get_db_session
+from config import get_settings
 
-
-from database import SessionLocal
+settings = get_settings()
 
 session = SessionLocal()
 
 from tasks.guncelkesintiler_task import GuncelkesintilerTask
+from tasks.uedas_task import UedasTask
 
 
-task = GuncelkesintilerTask(session)
-print('task start')
-task.do()
-print('task end')
-print(task.has_error)
+for task in [
+    GuncelkesintilerTask,
+    UedasTask
+    # web arama sonuçlarının analizi
+]:
+    with get_db_session() as session:
+        task = task(session)
+        task.do()
+
+
+# mail gönderen ai

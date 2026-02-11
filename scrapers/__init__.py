@@ -1,1 +1,2 @@
 from .guncelkesintiler_scraper import GuncelkesintilerScraper, GuncelkesintilerResult
+from .uedas_scraper import UedasScraper, UedasResult

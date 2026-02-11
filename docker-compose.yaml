@@ -11,6 +11,29 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  selenium-hub:
+    image: selenium/hub:latest
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+    environment:
+#      - SE_OPTS=--username ${SELENIUM_USERNAME} --password ${SELENIUM_PASSWORD}
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_VNC_PASSWORD=yeni_sifren
+
+  chrome-node:
+    image: selenium/node-chrome:latest
+    container_name: chrome-node
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    shm_size: 2g
+
 volumes:
   postgres_data:
     driver: local

@@ -3,8 +3,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.remote.client_config import ClientConfig
 
 from bs4 import BeautifulSoup
+
+from config import get_settings
 
 from dataclasses import dataclass
 from datetime import datetime
@@ -12,12 +15,17 @@ from hashlib import sha256
 import re
 
 
+settings = get_settings()
+
+
 @dataclass
 class GuncelkesintilerResult:
     url: str
     hash: str
     hash_type: str
+    title: str | None = None
     content: str | None = None
+    urls: list[str] | None = None
 
 
 class GuncelkesintilerScraper:
@@ -32,8 +40,16 @@ class GuncelkesintilerScraper:
         self.options.add_argument("--disable-infobars")
         self.options.add_argument("--disable-extensions")
 
-        self.browser = webdriver.Chrome(options=self.options)
+        self.client_config = ClientConfig(
+            remote_server_addr="http://localhost:4444/wd/hub",
+        )
 
+        # self.browser = webdriver.Chrome(options=self.options)
+        self.browser = webdriver.Remote(
+            client_config=self.client_config,
+            options=self.options,
+            # desired_capabilities=DesiredCapabilities.CHROME
+        )
         self.browser.execute_cdp_cmd(
             "Network.enable",
             {}
@@ -98,13 +114,19 @@ class GuncelkesintilerScraper:
             self.browser.get(news_url_result.url)
             soup = BeautifulSoup(self.browser.page_source, 'html.parser')
             content = soup.get_text(strip=True)
-
+            urls = [
+                "https://guncelkesintiler.com" + a.get("href") if a.get("href").startswith("/") else a.get("href")
+                for a in soup.find_all("a", href=True)
+                if not a.get("href").startswith(("api", "cdn", "static"))
+            ]
             news_content.append(
                 GuncelkesintilerResult(
+                    title=self.browser.title,
                     content=content,
                     url=news_url_result.url,
                     hash=news_url_result.hash,
                     hash_type=news_url_result.hash_type,
+                    urls=urls
                 )
             )
         return news_content
