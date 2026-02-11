@@ -6,7 +6,7 @@ from models import News
 from logging_config import get_logger
 
 from ai_agents import analyze_news
-from .base_task import BaseTask
+from . import BaseTask
 
 
 logger = get_logger(__name__)
@@ -58,6 +58,7 @@ class UedasTask(BaseTask):
                     url=news_url.url,
                     content_hash=news_url.hash,
                     is_trustable=r.confidence >= .80,
+                    confidence=r.confidence,
                     summary=r.summary,
                 )
                 news_url_results.append(new)

@@ -41,7 +41,7 @@ class GuncelkesintilerScraper:
         self.options.add_argument("--disable-extensions")
 
         self.client_config = ClientConfig(
-            remote_server_addr="http://localhost:4444/wd/hub",
+            remote_server_addr=settings.SELENIUM_REMOTE_SERVER_ADDR,
         )
 
         # self.browser = webdriver.Chrome(options=self.options)

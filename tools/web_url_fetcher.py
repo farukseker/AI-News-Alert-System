@@ -62,7 +62,7 @@ def web_url_fetcher(url: str) -> str:
 
         # browser = webdriver.Chrome(options=options)
         client_config = ClientConfig(
-            remote_server_addr="http://localhost:4444/wd/hub",
+            remote_server_addr=settings.SELENIUM_REMOTE_SERVER_ADDR,
         )
 
         browser = webdriver.Remote(

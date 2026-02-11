@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: password_kesinti
       POSTGRES_DB: kesinti
     ports:
-      - "7000:5432"
+      - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -15,7 +15,7 @@ services:
     image: selenium/hub:latest
     container_name: selenium-hub
     ports:
-      - "4444:4444"
+      - "4444"
     environment:
 #      - SE_OPTS=--username ${SELENIUM_USERNAME} --password ${SELENIUM_PASSWORD}
       - SE_EVENT_BUS_HOST=selenium-hub
@@ -33,6 +33,12 @@ services:
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
     shm_size: 2g
+
+  app:
+    build:
+      context: .
+    env_file:
+      - .env.docker
 
 volumes:
   postgres_data:
