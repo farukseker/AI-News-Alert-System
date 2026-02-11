@@ -39,12 +39,12 @@ class SearchScraper:
         options.add_argument("--disable-notifications")
         options.add_argument("--disable-infobars")
         options.add_argument("--disable-extensions")
-        client_config = ClientConfig(
-            remote_server_addr='http://selenium_hub:4444/wd/hub',
-        )
+        # client_config = ClientConfig(
+        #     remote_server_addr='http://selenium_hub:4444/wd/hub',
+        # )
         browser = webdriver.Remote(
             options=options,
-            command_executor="http://selenium-hub:4444",
+            command_executor=settings.SELENIUM_REMOTE_SERVER_HOST,
             # client_config=client_config,
         )
 

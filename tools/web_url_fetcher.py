@@ -61,13 +61,14 @@ def web_url_fetcher(url: str) -> str:
         options.add_argument("--disable-extensions")
 
         # browser = webdriver.Chrome(options=options)
-        client_config = ClientConfig(
-            remote_server_addr='http://selenium_hub:4444/wd/hub',
-        )
+        # client_config = ClientConfig(
+        #     remote_server_addr='http://selenium_hub:4444/wd/hub',
+        # )
 
         browser = webdriver.Remote(
             options=options,
-            client_config=client_config,
+            # client_config=client_config,
+            command_executor=settings.SELENIUM_REMOTE_SERVER_HOST,
             # desired_capabilities=DesiredCapabilities.CHROME
         )
 
