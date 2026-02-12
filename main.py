@@ -1,13 +1,17 @@
-import time
 import schedule
+
+import time
 
 from config import get_settings
 from database import get_db_session
+
 from tasks import GuncelkesintilerTask, UedasTask, NewsSearchTask
 from tasks.ai_notifier_task import AiNotifierTask
+
 from logging_config import get_logger
 
-from selenium_health_check import selenium_health_check
+from utils.db_init import init_db
+from utils.selenium_health_check import selenium_health_check
 
 
 logger = get_logger(__name__)
@@ -41,38 +45,33 @@ def task_manager():
         AiNotifierTask(session).do()
 
 
-schedule.every().day.at("09:00").do(task_manager)
-schedule.every().day.at("21:00").do(task_manager)
 
 
 def main():
     logger.info('__main__ started')
-    logger.info('enb dump')
-
-    import json
-    logger.info(
-        json.dumps(
-            settings.model_dump(exclude={"OPENROUTER_API_KEY", "SMTP_PASSWORD", "BASE_DIR"}),
-            indent=2
-        )
-    )
-    logger.info(f'env dump end {"="*25}')
+    # import json
+    # logger.info(
+    #     json.dumps(
+    #         settings.model_dump(exclude={"OPENROUTER_API_KEY", "SMTP_PASSWORD", "BASE_DIR"}),
+    #         indent=2
+    #     )
+    # )
+    # logger.info(f'env dump end {"="*25}')
 
     logger.info(f'selenium test {"="*25}')
     selenium_health_check_status = selenium_health_check(settings.SELENIUM_REMOTE_SERVER_ADDR)
-    logger.info(f'env dump test end result{selenium_health_check_status} {"="*25}')
+    logger.info(f'env dump test end result: {"OK" if selenium_health_check_status else "BAD"} {"="*25}')
 
     logger.info('init_db - start')
-    from utils.db_init import init_db
     init_db()
     logger.info('init_db - end')
 
-    logger.info('test task start task_manager')
-    task_manager()
-    logger.info('test task  end  task_manager')
+    logger.info('tasks start scheduling')
+    schedule.every().day.at("09:00").do(task_manager)
+    schedule.every().day.at("21:00").do(task_manager)
+    logger.info('tasks has scheduled')
 
-    logger.info('__main__ task mid schedule loop started')
-
+    logger.info('task scheduler started.')
     while True:
         schedule.run_pending()
         time.sleep(1)

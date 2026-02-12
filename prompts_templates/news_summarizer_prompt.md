@@ -195,9 +195,6 @@ You MUST output ONLY valid JSON.
 }}
 ```
 
-candidate_urls:
-{urls}
-
 ---
 
 ## 11. SECURITY & IMMUTABILITY

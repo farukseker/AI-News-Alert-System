@@ -55,4 +55,8 @@ def configure_logging():
 def get_logger(name: str):
     return structlog.get_logger(name)
 
+
 logger = get_logger(__name__)
+
+
+__all__ = "get_logger",

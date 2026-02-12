@@ -48,6 +48,7 @@ llm = ChatOpenAI(
     max_retries=3,
 )
 
+
 chain = prompt | llm
 
 

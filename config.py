@@ -6,11 +6,10 @@ from pathlib import Path
 class Settings(BaseSettings):
     BASE_DIR: Path = Path(__file__).resolve().parent
     DATABASE_URL: str
-    OPENROUTER_BASE_MODEL: str
     OPENROUTER_API_KEY: str
     OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
     SUMMARIZER_MODEL: str = "openai/gpt-4.1-nano"
-    # SUMMARIZER_MODEL: str = "openai/gpt-4o-mini"
+    OPENROUTER_BASE_MODEL: str
     LOG_LEVEL: str = "INFO"
     ENVIRONMENT: str = "development"
     SMTP_USERNAME: str
