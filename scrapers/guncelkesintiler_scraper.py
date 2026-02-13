@@ -44,31 +44,34 @@ class GuncelkesintilerScraper:
         # )
 
         # self.browser = webdriver.Chrome(options=self.options)
-        self.browser = webdriver.Remote(
-            # client_config=self.client_config,
-            options=self.options,
-            command_executor=settings.SELENIUM_REMOTE_SERVER_HOST,
-            # desired_capabilities=DesiredCapabilities.CHROME
-        )
-        self.browser.execute_cdp_cmd(
-            "Network.enable",
-            {}
-        )
+        try:
+            self.browser = webdriver.Remote(
+                # client_config=self.client_config,
+                options=self.options,
+                command_executor=settings.SELENIUM_REMOTE_SERVER_HOST,
+                # desired_capabilities=DesiredCapabilities.CHROME
+            )
+            self.browser.execute_cdp_cmd(
+                "Network.enable",
+                {}
+            )
 
-        self.browser.execute_cdp_cmd(
-            "Network.setBlockedURLs",
-            {
-                "urls": [
-                    "*googlesyndication.com/*",
-                    "*doubleclick.net/*",
-                    "*adsystem.com/*",
-                    "*adservice.google.com/*",
-                    "*facebook.com/tr/*",
-                    "*taboola.com/*",
-                    "*outbrain.com/*"
-                ]
-            }
-        )
+            self.browser.execute_cdp_cmd(
+                "Network.setBlockedURLs",
+                {
+                    "urls": [
+                        "*googlesyndication.com/*",
+                        "*doubleclick.net/*",
+                        "*adsystem.com/*",
+                        "*adservice.google.com/*",
+                        "*facebook.com/tr/*",
+                        "*taboola.com/*",
+                        "*outbrain.com/*"
+                    ]
+                }
+            )
+        except Exception as e:
+            print(e)
 
     def get_news_url_list(self) -> list[GuncelkesintilerResult]:
         self.browser.get("https://guncelkesintiler.com/bursa/orhangazi/")

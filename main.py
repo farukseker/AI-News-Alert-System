@@ -1,4 +1,5 @@
 import schedule
+import sentry_sdk
 
 import time
 
@@ -8,11 +9,12 @@ from database import get_db_session
 from tasks import GuncelkesintilerTask, UedasTask, NewsSearchTask
 from tasks.ai_notifier_task import AiNotifierTask
 
-from logging_config import get_logger
+from logging_config import get_logger, configure_logging
 
 from utils.db_init import init_db
 from utils.selenium_health_check import selenium_health_check
 
+configure_logging()
 
 logger = get_logger(__name__)
 settings = get_settings()
@@ -35,11 +37,14 @@ def task_manager():
         UedasTask,
         NewsSearchTask,
     ]:
-        ok = run_task_once(task_cls)
+        if run_task_once(task_cls):
+            logger.info(f"Task {task_cls.__name__} succeeded")
+        else:
+            logger.info(f"Task {task_cls.__name__} failed")
 
-        if not ok:
-            time.sleep(10)
-            run_task_once(task_cls)
+        # if not ok:
+        #     time.sleep()
+        #     run_task_once(task_cls)
 
     with get_db_session() as session:
         AiNotifierTask(session).do()
@@ -67,8 +72,8 @@ def main():
     logger.info('init_db - end')
 
     logger.info('tasks start scheduling')
-    schedule.every().day.at("09:00").do(task_manager)
-    schedule.every().day.at("21:00").do(task_manager)
+    schedule.every().day.at("06:00").do(task_manager)
+    schedule.every().day.at("18:00").do(task_manager)
     logger.info('tasks has scheduled')
 
     logger.info('task scheduler started.')
@@ -78,5 +83,8 @@ def main():
 
 
 if __name__ == "__main__":
-
-    main()
+    try:
+        main()
+    except:
+        logger.error("Application crashed", exc_info=True)
+        raise
