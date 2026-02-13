@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     SELENIUM_REMOTE_SERVER_HOST: str
     SENTRY_DSN: str
     SENTRY_TRACES_SAMPLE_RATE: float = 0.1
+    WEBHOOK_URL: str
 
     model_config = SettingsConfigDict(
         env_file=".env",
