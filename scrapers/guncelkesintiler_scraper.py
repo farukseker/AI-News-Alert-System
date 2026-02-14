@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 
 from config import get_settings
+from logging_config import get_logger
 
 from dataclasses import dataclass
 from datetime import datetime
@@ -14,6 +15,7 @@ from hashlib import sha256
 import re
 
 
+logger = get_logger(__name__)
 settings = get_settings()
 
 
@@ -71,7 +73,7 @@ class GuncelkesintilerScraper:
                 }
             )
         except Exception as e:
-            print(e)
+            logger.error(e)
 
     def get_news_url_list(self) -> list[GuncelkesintilerResult]:
         self.browser.get("https://guncelkesintiler.com/bursa/orhangazi/")
@@ -135,7 +137,11 @@ class GuncelkesintilerScraper:
         return news_content
 
     def close(self):
-        self.browser.quit()
+        try:
+            self.browser.close()
+            self.browser.quit()
+        except Exception as e:
+            logger.error(e)
 
 
 __all__ = "GuncelkesintilerScraper", "GuncelkesintilerResult"
