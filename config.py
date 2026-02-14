@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     OPENROUTER_API_KEY: str
     OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
-    SUMMARIZER_MODEL: str = "openai/gpt-4.1-nano"
+    SUMMARIZER_MODEL: str = "google/gemma-2-9b-it"
     OPENROUTER_BASE_MODEL: str
     LOG_LEVEL: str = "INFO"
     ENVIRONMENT: str = "development"
